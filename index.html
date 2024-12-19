@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f4f4f9; /* Немного мягкий серый фон */
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+div {
+  margin: 20px auto;
+  text-align: center;
+}
+
+label {
+  font-size: 1.1em;
+  margin-right: 10px;
+  color: #555;
+}
+
+input {
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 220px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1em;
+  font-weight: bold;
+  color: #fff;
+  background-color: #28a745; /* Зеленый цвет */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #218838; /* Темнее при наведении */
+  transform: translateY(-2px); /* Плавный подъем */
+}
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  width: 80%;
+  border-collapse: collapse;
+  margin-top: 25px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 12px;
+  font-size: 1em;
+}
+
+th {
+  background-color: #007BFF;
+  color: white;
+  /* text-transform: uppercase; */
+  letter-spacing: 0.5px;
+}
+
+/* tr:nth-child(even) {
+  background-color: #f2f7ff; Светло-голубой цвет
+} */
+
+tr:hover {
+  background-color: #e6f7ff; /* Подсветка строки */
+}
+
+@media (max-width: 600px) {
+  input, button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+  </style>
+</head>
+<body>
+  <h1>Розрахунок Показників за Терміном Зберігання</h1>
+  
+  <div style="text-align: center;">
+    <label for="storageTerm">Термін зберігання (діб): </label>
+    <input type="number" id="storageTerm" placeholder="Введіть термін">
+    <button onclick="calculateValues()">Розрахувати</button>
+  </div>
+
+
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>Термін зберігання(діб)</th>
+          <th>Титрована кислотність (°Т)</th>
+          <th>pH</th>
+          <th>КМАФАнМ</th>
+        </tr>
+      </thead>
+      <tbody id="resultsTable"></tbody>
+    </table>
+  </div>
+    
+
+
+  <script>
+    function calculateValues() {
+  const term = parseFloat(document.getElementById('storageTerm').value); // Срок хранения (t)
+  const table = document.getElementById('resultsTable');
+
+  // Очистка попередніх результатів
+  // table.innerHTML = "";
+
+
+
+  // Перевірка коректності коду
+  if (isNaN(term) || term <= 0) {
+    alert("Будь ласка, введіть коректний термін зберігання!");
+    return;
+  }
+
+
+  // Формули для розрахунку
+  const acidity = 0.0058 * Math.pow(term, 2) - 0.0204 * term + 17.97; // Титрована кислотність (y1)
+  const pH = -0.0002 * Math.pow(term, 2) - 0.0017 * term + 6.66;     // pH (y2)
+  const KMAFAM = 2.19 * Math.pow(term, 2) + 11.63 * term + 1974.29;  // КМАФАМ (y3)
+
+  const row = document.createElement('tr')
+  row.innerHTML = `
+    <td>${term.toFixed(2)}</td>
+    <td>${acidity.toFixed(2)}</td>
+    <td>${pH.toFixed(2)}</td>
+    <td>${KMAFAM.toFixed(2)}</td>
+  `
+
+  table.appendChild(row)
+  // Додавання розрахованих значень в таблицю
+  // const row = `
+  //   <tr>
+  //     <td>${acidity.toFixed(2)}</td>
+  //     <td>${pH.toFixed(2)}</td>
+  //     <td>${KMAFAM.toFixed(0)}</td>
+  //   </tr>
+  // `;
+  // table.innerHTML = row;
+}
+  </script>
+</body>
+</html>
